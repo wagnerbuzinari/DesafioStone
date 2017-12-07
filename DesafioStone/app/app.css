@@ -4,8 +4,13 @@ body {
     height: 100%;
     min-height: 100%;
     position: relative;
-    overflow:hidden;
+    overflow: hidden;
 }
+
+p {
+    font: 200 20px/1.5 Helvetica, Verdana, sans-serif;
+}
+
 .btn-warning {
     background-color: #B33A3A;
     border: none;
@@ -19,15 +24,14 @@ body {
 }
 
 .btn-confirm {
+    width: 100%;
     background-color: #4CAF50;
-    border: none;
     color: white;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
 .btn-primary {
@@ -157,9 +161,35 @@ li {
     }
 
         li a:hover {
-            font-size: 30px;
             background: #f6f6f6;
         }
+
+
+
+input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type=submit] {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+    input[type=submit]:hover {
+        background-color: #45a049;
+    }
 
 .header {
     height: 60px;
@@ -183,10 +213,36 @@ li {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    margin-top:90px;
+    margin-top: 90px;
     margin-bottom: 70px;
     height: 400px;
-    background-color:aquamarine;
-    padding-top:10px;
+    padding-top: 10px;
     overflow: scroll;
 }
+
+#alert {
+    padding: 20px;
+    background-color: #f44336; /* Red */
+    color: white;
+    margin-bottom: 15px;
+    display:none;
+    opacity: 1;
+    transition: opacity 0.6s; /* 600ms to fade out */
+}
+
+/* The close button */
+#closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+    /* When moving the mouse over the close button */
+    #closebtn:hover {
+        color: black;
+    }

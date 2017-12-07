@@ -2,12 +2,57 @@
 
 <div class="content">
     <!--lista de mesas-->
-    <div>
+    <div ng-show="mesas.length && !cadastrandoMesa && !alterandoMesa && !realizandoPedido">
         <ul>
-            <li ng-repeat="mesa in mesas">{{alimento.nome}}</li>
+            <li ng-repeat="mesa in mesas"><a ng-click="selecionarMesa(mesa)">{{mesa.nome}}</a></li>
         </ul>
-    </div>    
+    </div>
+    <!--cadastro de uma mesa-->
+    <div ng-show="cadastrandoMesa">
+        <div id="alert">
+            <span id="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+            &nbsp;
+            {{mensagemDeErro}}
+        </div>
+        <div>
+            <label>Nome/Numero da mesa</label>
+            <input type="text" ng-model="novaMesa.nome">
+
+            <input type="button" class="btn-confirm" ng-click="salvarMesa()" value="Salvar Mesa">
+        </div>
+    </div>
+    <!--opções de uma mesa selecionada-->
+    <div ng-show="alterandoMesa">
+        <div>
+            <label>Nome/Numero da mesa</label>
+            <input type="text" ng-model="mesaSelecionada.nome" disabled>
+            <div>
+                <label>Valor a ser pago pela mesa</label>
+                <span>{{mesaSelecionada.valorConsumido | currency:"R$"}}</span>
+            </div>
+            <label ng-show="mesaSelecionada.itensComprados.length">Itens consumidos pela mesa</label>
+            <ul>
+                <li ng-repeat="item in mesaSelecionada.itensComprados">{{item.nome}} x{{item.quantidade}}</li>
+            </ul>
+        </div>
+        <input type="button" class="btn-confirm" ng-click="realizarPedido()" value="Realizar pedido para mesa">
+    </div>
+    <!--cardápio-->
+    <div ng-show="realizandoPedido">
+        <ul>
+            <li ng-repeat="item in alimentos"><a ng-click="selecionarItem(item)">{{item.nome}} - {{item.valor | currency:"R$"}}</a></li>
+        </ul>
+        <input type="button" class="btn-confirm" ng-show="itemSelecionado" ng-click="adcionarItemMesa()" value="Pedir {{itemSelecionado.nome}} para {{mesaSelecionada.nome}}">
+    </div>
 </div>
+<!--rodapé-->
 <div class="footer" style="text-align:center">
-    <img ng-click="cadastrarMesa()" src="Imagens/icons8-plus-50.png" />
+    <div ng-switch="paginaAtual">
+        <div ng-switch-when="principal"><img ng-click="cadastrarMesa()" src="Imagens/icons8-plus-50.png" /></div>
+        <div ng-switch-when="cadastroMesa"><img ng-click="cancelarCadastro()" src="Imagens/icons8-left-filled-50.png" /></div>
+        <div ng-switch-when="alterandoMesa"><img ng-click="cancelarCadastro()" src="Imagens/icons8-left-filled-50.png" /></div>
+        <div ng-switch-when="realizandoPedido"><img ng-click="voltarParaMesaSelecionada()" src="Imagens/icons8-left-filled-50.png" /></div>
+    </div>
 </div>
+
+
