@@ -1,0 +1,52 @@
+<style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+</style>
+
+<div>
+    <table>
+        <tr>
+            <th>Moeda inicial</th>
+            <th>Valor a ser convertido</th>
+            <th>Moeda a ser retornada</th>
+            <th>Resultado</th>
+        </tr>
+        <tr>
+            <td>
+                <select ng-model="moedaInicial">
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="GBP">GBP</option>
+                    <option value="JPY">JPY</option>
+                    <option value="CNH">CNH</option>
+                </select>
+            </td>
+            <td><input type="number" ng-model="valor"></td>
+            <td>
+                <select ng-model="moedaFinal">
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="GBP">GBP</option>
+                    <option value="JPY">JPY</option>
+                    <option value="CNH">CNH</option>
+                </select>
+            </td>
+            <td>{{resultado}}</td>
+        </tr>
+    </table>
+    <button ng-click="converter(moedaInicial, moedaFinal, valor)" ng-show="!buttonClicked">Converter</button>
+</div>
+

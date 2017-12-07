@@ -1,0 +1,35 @@
+<style>
+    table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #dddddd;
+    }
+</style>
+
+<div>
+    <table>
+        <tr>
+            <th>Simbolo</th>
+            <th>Preco</th>
+            <th>Bid</th>
+            <th>Ask</th>
+        </tr>
+        <tr ng-repeat="item in Lista">
+            <td>{{item.symbol}}</td>
+            <td>{{item.price | currency}}</td>
+            <td>{{item.bid | currency}}</td>
+            <td>{{item.ask | currency}}</td>
+        </tr>
+    </table>
+</div>
+<div><p>Os valores serao atualizados em {{contador}} segundos</p></div>
