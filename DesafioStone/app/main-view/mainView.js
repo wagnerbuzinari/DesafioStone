@@ -14,6 +14,9 @@ angular.module('myApp.mainView', ['ngRoute'])
         $scope.cadastrandoMesa = false;
         $scope.alterandoMesa = false;
         $scope.realizandoPedido = false;
+        $scope.realizandoPagamento = false;
+        $scope.visualizandoHistoricoPagamento = false;
+        $scope.novoPagamento = new Object();
         $scope.novaMesa = new Object();
         $scope.numeroMesaNova = 1;
         $scope.paginaAtual = "principal";
@@ -53,14 +56,14 @@ angular.module('myApp.mainView', ['ngRoute'])
             $scope.paginaAtual = "cadastroMesa"
             if (!$scope.$$phase) {
                 $scope.$apply();
-            }
+            };
         };
 
         $scope.cancelarCadastro = function () {
             $scope.cadastrandoMesa = false;
             $scope.alterandoMesa = false;
             $scope.paginaAtual = "principal";
-        }
+        };
 
         $scope.salvarMesa = function () {
             if (validarNomeMesa($scope.novaMesa.nome)) {
@@ -70,15 +73,16 @@ angular.module('myApp.mainView', ['ngRoute'])
                 $scope.novaMesa.valorConsumido = 0;
                 $scope.novaMesa.valorPago = 0;
                 $scope.novaMesa.itensComprados = [];
+                $scope.novaMesa.pagamentosRealizados = [];
                 $scope.mesas.push($scope.novaMesa);
                 $scope.novaMesa = new Object();
                 $scope.cadastrandoMesa = false;
                 $scope.paginaAtual = "principal";
                 if (!$scope.$$phase) {
                     $scope.$apply();
-                }
-            }
-        }
+                };
+            };
+        };
 
         $scope.selecionarMesa = function (mesa) {
             $scope.mesaSelecionada = mesa;
@@ -95,6 +99,8 @@ angular.module('myApp.mainView', ['ngRoute'])
         $scope.voltarParaMesaSelecionada = function () {
             $scope.alterandoMesa = true;
             $scope.realizandoPedido = false;
+            $scope.realizandoPagamento = false;
+            $scope.visualizandoHistoricoPagamento = false;
             $scope.paginaAtual = "alterandoMesa";
         };
 
@@ -112,13 +118,61 @@ angular.module('myApp.mainView', ['ngRoute'])
                     if (!itemExistente) {
                         $scope.mesas[i].valorConsumido += $scope.itemSelecionado.valor
                         $scope.mesaSelecionada.itensComprados.push($scope.itemSelecionado)
-                    }
-                }
+                    };
+                };
             };
         };
 
         $scope.selecionarItem = function (item) {
             $scope.itemSelecionado = item;
+        };
+
+        $scope.finalizarMesa = function (mesa) {
+            for (var i = 0; i < $scope.mesas.length; i++) {
+                if ($scope.mesas[i].nome === mesa.nome){
+                    var index = $scope.mesas.indexOf($scope.mesas[i]);
+                    $scope.mesas.splice(index, 1);
+                    $scope.alterandoMesa = false;
+                    $scope.paginaAtual = "principal";
+                };
+            };
+        };
+
+        $scope.realizarPagamento = function () {
+            $scope.realizandoPagamento = true;
+            $scope.alterandoMesa = false;
+            $scope.paginaAtual = "realizandoPagamento";
+        };
+
+        $scope.finalizarPagamento = function () {
+            for (var i = 0; i < $scope.mesas.length; i++) {
+                for (var i = 0; i < $scope.mesas.length; i++) {
+                    if ($scope.mesas[i].nome === $scope.mesaSelecionada.nome) {
+                        if (!validarPagamento($scope.mesas[i], $scope.novoPagamento.valor)) {
+                            $scope.mesas[i].valorPago += $scope.novoPagamento.valor;
+                            $scope.novoPagamento.numero = $scope.mesaSelecionada.pagamentosRealizados.length + 1;
+                            $scope.mesas[i].pagamentosRealizados.push($scope.novoPagamento);
+                            $scope.mesaSelecionada = $scope.mesas[i];
+                            console.log($scope.mesaSelecionada);
+                            if (!$scope.$$phase) {
+                                $scope.$apply();
+                            }
+                            $scope.novoPagamento = new Object();
+                            $scope.realizandoPagamento = false;
+                            $scope.alterandoMesa = true;
+                            $scope.paginaAtual = "alterandoMesa"
+                        } else {
+                            document.getElementById('alertPagamento').style.display = 'flex'
+                        };
+                    };
+                };
+            };
+        };
+
+        $scope.mostrarHistoricoPagamento = function () {
+            $scope.visualizandoHistoricoPagamento = true;
+            $scope.alterandoMesa = false;
+            $scope.paginaAtual = "visualizandoHistorico";
         };
 
         //Funções privadas
@@ -136,11 +190,28 @@ angular.module('myApp.mainView', ['ngRoute'])
                     if ($scope.mesas[i].nome === nome) {
                         $scope.mensagemDeErro = "Nome de mesa ja existente"
                         return true;
-                    }
+                    };
                 };
-            }
-        }
+            };
+            return false;
+        };
 
-        $scope.popularInterface()
+        function validarPagamento(mesa, valor) {
+            if ((mesa.valorConsumido - mesa.valorPago) < valor ) {
+                $scope.mensagemDeErro = "Valor inserido maior do que o que falta pagar."
+                return true;
+            }
+            if (valor === undefined) {
+                $scope.mensagemDeErro = "Campo de valor vazio."
+                return true;
+            }
+            if (valor <= 0) {
+                $scope.mensagemDeErro = "O valor deve ser maior que zero."
+                return true;
+            }
+            return false;
+        };
+
+        $scope.popularInterface();
 
     }]);
